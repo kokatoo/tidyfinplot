@@ -1,5 +1,7 @@
 # tidyfinplot
 
+[![R CI](https://github.com/kokatoo/tidyfinplot/actions/workflows/check.yml/badge.svg)](https://github.com/kokatoo/tidyfinplot/actions/workflows/check.yml)
+
 Financial plotting tools built on tidyquant and ggplot2.
 
 ## Features
