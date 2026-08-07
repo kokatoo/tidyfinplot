@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Optional: Test Node 24 early
     strategy:
       matrix:
         r-version: ['4.3', '4.4']
@@ -36,10 +38,12 @@ jobs:
             any::scales
             any::zoo
 
+      - name: Install package
+        run: devtools::install()
+        shell: Rscript {0}
+
       - name: Run unit tests
-        run: |
-          devtools::install()
-          devtools::test()
+        run: devtools::test()
         shell: Rscript {0}
 
       - name: Run BDD tests
@@ -52,13 +56,13 @@ jobs:
         run: |
           library(covr)
           cov <- package_coverage()
+          covr::to_cobertura(cov, "coverage.xml")
           print(cov)
-          covr::codecov()
         shell: Rscript {0}
 
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
+          files: ./coverage.xml
           fail_ci_if_error: false
