@@ -9,6 +9,7 @@ plot_rsi(
   rsi_col = "RSI_14",
   oversold = 30,
   overbought = 70,
+  colors = candle_palette(),
   date_breaks = "3 month",
   date_labels = "\%b \%y"
 )
@@ -21,6 +22,8 @@ plot_rsi(
 \item{oversold}{Lower threshold line}
 
 \item{overbought}{Upper threshold line}
+
+\item{colors}{Candle up/down colors, see \code{\link[=candle_palette]{candle_palette()}}}
 
 \item{date_breaks}{Date break spacing}
 

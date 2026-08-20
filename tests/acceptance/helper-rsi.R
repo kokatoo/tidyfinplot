@@ -10,8 +10,9 @@ then("RSI should be bounded by 0 and 100", function(context) {
 })
 
 then("I should see horizontal lines at 30 and 70", function(context) {
-  yintercepts <- unlist(lapply(context$plot$layers, function(x) {
-    if ("GeomHline" %in% class(x$geom)) x$aes_params$yintercept
+  built <- ggplot2::ggplot_build(context$plot)$data
+  yintercepts <- unlist(lapply(built, function(d) {
+    if ("yintercept" %in% names(d)) unique(d$yintercept)
   }))
   testthat::expect_true(30 %in% yintercepts)
   testthat::expect_true(70 %in% yintercepts)

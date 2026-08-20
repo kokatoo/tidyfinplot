@@ -79,6 +79,7 @@ plot_volume <- function(data, colors = candle_palette(),
 #' @param rsi_col Name of the RSI column to plot
 #' @param oversold Lower threshold line
 #' @param overbought Upper threshold line
+#' @param colors Candle up/down colors, see [candle_palette()]
 #' @param date_breaks Date break spacing
 #' @param date_labels Date label format
 #' @return ggplot object
@@ -86,5 +87,34 @@ plot_volume <- function(data, colors = candle_palette(),
 #' @import ggplot2 dplyr scales
 plot_rsi <- function(data, rsi_col = "RSI_14",
                      oversold = 30, overbought = 70,
+                     colors = candle_palette(),
                      date_breaks = "3 month", date_labels = "%b %y") {
+  ggplot(data, aes(x = date, y = .data[[rsi_col]])) +
+    geom_ribbon(
+      aes(
+        ymin = overbought,
+        ymax = pmax(.data[[rsi_col]], overbought)
+      ),
+      fill = colors["down"], alpha = 0.1
+    ) +
+    geom_ribbon(
+      aes(ymin = pmin(.data[[rsi_col]], oversold), ymax = oversold),
+      fill = colors["up"], alpha = 0.1
+    ) +
+    geom_line(color = "navy") +
+    geom_hline(
+      yintercept = c(oversold, overbought),
+      linetype = "dashed",
+      color = c(colors["up"], colors["down"])
+    ) +
+    scale_x_date(
+      date_breaks = date_breaks,
+      date_labels = date_labels
+    ) +
+    scale_y_continuous(
+      limits = c(0, 100),
+      breaks = seq(0, 100, by = 20)
+    ) +
+    labs(x = "", y = "") +
+    theme_tq()
 }

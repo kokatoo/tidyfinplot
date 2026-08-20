@@ -11,4 +11,10 @@ p1 <- plot_candlestick(spy, date_breaks = "1 month", date_labels = "%b %y")
 
 p2 <- plot_volume(spy, date_breaks = "1 month", date_labels = "%b %y")
 
-p1 / p2 + patchwork::plot_layout(heights = c(0.7, 0.3))
+p1 / p2 +
+  patchwork::plot_layout(heights = c(0.7, 0.3))
+
+p3 <- plot_rsi(spy, date_breaks = "1 month", date_labels = "%b %y")
+p1 / p3 +
+  ggtitle("RSI 14") +
+  patchwork::plot_layout(heights = c(0.7, 0.3))
