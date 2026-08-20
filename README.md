@@ -31,6 +31,7 @@ plot_volume(spy)
 - Candlestick charts with automatic OHLC mapping
 - Moving average overlays (SMA 5, 20, 50, 200)
 - Volume bars colored by price direction
+- RSI charts with oversold/overbought thresholds (multiple periods)
 - Built-in color palettes, all customizable
 
 ## License

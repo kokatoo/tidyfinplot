@@ -17,7 +17,7 @@ plot_rsi(
 \arguments{
 \item{data}{SPY data frame with a date and RSI column}
 
-\item{rsi_col}{Name of the RSI column to plot}
+\item{rsi_col}{Name(s) of the RSI column(s) to plot}
 
 \item{oversold}{Lower threshold line}
 

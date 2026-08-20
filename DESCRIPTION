@@ -15,4 +15,5 @@ Imports:
     ggplot2,
     dplyr,
     tidyquant,
-    scales
+    scales,
+    RColorBrewer

@@ -37,6 +37,7 @@ jobs:
             any::dplyr
             any::scales
             any::zoo
+            any::RColorBrewer
 
       - name: Install package
         run: devtools::install()

@@ -90,8 +90,9 @@ test_that("plot_rsi shows no legend for multiple lines", {
   p <- plot_rsi(spy, rsi_col = c("RSI_9", "RSI_14", "RSI_21"))
   expect_s3_class(p, "ggplot")
 
-  grob_names <- ggplot2::ggplotGrob(p)$layout$name
-  expect_false(any(grepl("guide", grob_names)))
+  gg <- ggplot2::ggplotGrob(p)
+  guide_grobs <- gg$grobs[grepl("guide", gg$layout$name)]
+  expect_true(all(vapply(guide_grobs, inherits, logical(1), "zeroGrob")))
 })
 
 test_that("plot_rsi validates missing RSI columns", {

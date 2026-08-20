@@ -78,7 +78,7 @@ plot_volume <- function(data, colors = candle_palette(),
 #' Plot RSI with overbought and oversold thresholds
 #'
 #' @param data SPY data frame with a date and RSI column
-#' @param rsi_col Name of the RSI column to plot
+#' @param rsi_col Name(s) of the RSI column(s) to plot
 #' @param oversold Lower threshold line
 #' @param overbought Upper threshold line
 #' @param colors Candle up/down colors, see [candle_palette()]
@@ -91,19 +91,47 @@ plot_rsi <- function(data, rsi_col = "RSI_14",
                      oversold = 30, overbought = 70,
                      colors = candle_palette(),
                      date_breaks = "3 month", date_labels = "%b %y") {
-  ggplot(data, aes(x = date, y = .data[[rsi_col]])) +
+  missing <- setdiff(rsi_col, names(data))
+
+  if (length(missing) > 0) {
+    stop("RSI columns not found in data: ", paste(missing, collapse = ", "))
+  }
+
+  # Keep only rows where every RSI period has a value (drops the warm-up rows)
+  data <- data[complete.cases(data[rsi_col]), , drop = FALSE]
+
+  # Envelope of all RSI lines, used for the shaded zones
+  data$rsi_max <- do.call(pmax, c(unname(data[rsi_col]), list(na.rm = TRUE)))
+  data$rsi_min <- do.call(pmin, c(unname(data[rsi_col]), list(na.rm = TRUE)))
+
+  n <- length(rsi_col)
+
+  line_colors <- if (n == 1) {
+    "navy"
+  } else {
+    # Interpolate over the darker half of the Blues palette
+    grDevices::colorRampPalette(
+      RColorBrewer::brewer.pal(9, "Blues")[c(5, 9)]
+    )(n)
+  }
+
+  p <- ggplot(data, aes(x = date)) +
     geom_ribbon(
-      aes(
-        ymin = overbought,
-        ymax = pmax(.data[[rsi_col]], overbought)
-      ),
+      aes(ymin = overbought, ymax = pmax(rsi_max, overbought)),
       fill = colors["down"], alpha = 0.1
     ) +
     geom_ribbon(
-      aes(ymin = pmin(.data[[rsi_col]], oversold), ymax = oversold),
+      aes(ymin = pmin(rsi_min, oversold), ymax = oversold),
       fill = colors["up"], alpha = 0.1
-    ) +
-    geom_line(color = "navy") +
+    )
+  for (i in seq_along(rsi_col)) {
+    p <- p + geom_line(
+      aes(y = !!rlang::sym(rsi_col[i])),
+      color = line_colors[i]
+    )
+  }
+
+  p +
     geom_hline(
       yintercept = c(oversold, overbought),
       linetype = "dashed",
