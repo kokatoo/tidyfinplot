@@ -1,10 +1,16 @@
-#' #' Plot candlestick with SMAs
+#' Plot candlestick with SMAs
 #'
-#' @param spy SPY data frame with OHLC and SMA columns
+#' @param data SPY data frame with OHLC and SMA columns
+#' @param colors SMA colors, see [sma_palette()]
+#' @param candles Candle up/down colors, see [candle_palette()]
+#' @param date_breaks Date break spacing
+#' @param date_labels Date label format
 #' @return ggplot object
 #' @export
 #' @import ggplot2 dplyr tidyquant scales
-plot_candlestick <- function(data, colors = sma_palette(), candles = candle_palette()) {
+plot_candlestick <- function(data, colors = sma_palette(), candles = candle_palette(),
+                             date_breaks = "3 month", date_labels = "%b %y") {
+
   ggplot(data, aes(x = date, y = close)) +
     tidyquant::geom_candlestick(
       aes(open = open, high = high, low = low, close = close),
@@ -18,8 +24,8 @@ plot_candlestick <- function(data, colors = sma_palette(), candles = candle_pale
     geom_line(aes(y = SMA_50), color = colors["SMA_50"]) +
     geom_line(aes(y = SMA_200), color = colors["SMA_200"]) +
     scale_x_date(
-      date_breaks = "3 month",
-      date_labels = "%b %y"
+      date_breaks = date_breaks,
+      date_labels = date_labels
     ) +
     scale_y_continuous(
       breaks = scales::breaks_width(10),
@@ -31,11 +37,16 @@ plot_candlestick <- function(data, colors = sma_palette(), candles = candle_pale
 
 #' Plot volume below candlestick chart
 #'
-#' @param data SPY data frame with date and volume columns
+#' @param data SPY data frame with date, open, close and volume columns
+#' @param colors Candle up/down colors, see [candle_palette()]
+#' @param date_breaks Date break spacing
+#' @param date_labels Date label format
 #' @return ggplot object
 #' @export
 #' @import ggplot2 dplyr scales
-plot_volume <- function(data, colors = candle_palette()) {
+plot_volume <- function(data, colors = candle_palette(),
+                        date_breaks = "3 month", date_labels = "%b %y") {
+
   # Determine if each day is up or down based on close vs open
   data <- data |>
     mutate(
@@ -47,8 +58,8 @@ plot_volume <- function(data, colors = candle_palette()) {
     geom_col(alpha = 0.7) +
     scale_fill_identity() +
     scale_x_date(
-      date_breaks = "3 month",
-      date_labels = "%b %y"
+      date_breaks = date_breaks,
+      date_labels = date_labels
     ) +
     scale_y_continuous(
       labels = scales::label_number(scale = 1e-6, suffix = "M"),

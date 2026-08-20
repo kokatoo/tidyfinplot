@@ -2,16 +2,30 @@
 % Please edit documentation in R/plot.R
 \name{plot_candlestick}
 \alias{plot_candlestick}
-\title{#' Plot candlestick with SMAs}
+\title{Plot candlestick with SMAs}
 \usage{
-plot_candlestick(data)
+plot_candlestick(
+  data,
+  colors = sma_palette(),
+  candles = candle_palette(),
+  date_breaks = "3 month",
+  date_labels = "\%b \%y"
+)
 }
 \arguments{
-\item{spy}{SPY data frame with OHLC and SMA columns}
+\item{data}{SPY data frame with OHLC and SMA columns}
+
+\item{colors}{SMA colors, see \code{\link[=sma_palette]{sma_palette()}}}
+
+\item{candles}{Candle up/down colors, see \code{\link[=candle_palette]{candle_palette()}}}
+
+\item{date_breaks}{Date break spacing}
+
+\item{date_labels}{Date label format}
 }
 \value{
 ggplot object
 }
 \description{
-#' Plot candlestick with SMAs
+Plot candlestick with SMAs
 }
