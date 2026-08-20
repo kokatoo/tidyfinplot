@@ -53,3 +53,11 @@ test_that("plot_volume colors match candle direction", {
   colors_used <- unique(plot_data$fill)
   expect_true(length(colors_used) >= 2)
 })
+
+test_that("plot_volume renders a dual y axis", {
+  p <- plot_volume(spy)
+  expect_s3_class(p, "ggplot")
+
+  gg <- ggplot2::ggplotGrob(p)
+  expect_equal(sum(grepl("axis-r", gg$layout$name)), 1)
+})

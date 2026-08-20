@@ -5,5 +5,6 @@ Feature: Volume plot
     When I plot volume chart
     Then I should see a ggplot
     And I should see no axis titles
+    And I should see a dual y axis
     And all volume values should be positive
     And I should see up and down colors

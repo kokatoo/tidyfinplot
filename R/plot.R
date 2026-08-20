@@ -143,7 +143,8 @@ plot_rsi <- function(data, rsi_col = "RSI_14",
     ) +
     scale_y_continuous(
       limits = c(0, 100),
-      breaks = seq(0, 100, by = 20)
+      breaks = seq(0, 100, by = 20),
+      sec.axis = sec_axis(~ ., breaks = seq(0, 100, by = 20))
     ) +
     labs(x = "", y = "") +
     theme_tq()

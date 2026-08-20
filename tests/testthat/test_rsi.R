@@ -101,3 +101,12 @@ test_that("plot_rsi validates missing RSI columns", {
     "RSI columns not found in data"
   )
 })
+
+test_that("plot_rsi renders a dual y axis", {
+  p <- plot_rsi(spy)
+  expect_s3_class(p, "ggplot")
+
+  # Rendering warns about NA warm-up rows; irrelevant to the axis check
+  gg <- suppressWarnings(ggplot2::ggplotGrob(p))
+  expect_equal(sum(grepl("axis-r", gg$layout$name)), 1)
+})

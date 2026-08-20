@@ -5,6 +5,7 @@ Feature: RSI plot
     When I plot RSI chart
     Then I should see a ggplot
     And I should see no axis titles
+    And I should see a dual y axis
     And RSI should be bounded by 0 and 100
     And I should see horizontal lines at 30 and 70
 
