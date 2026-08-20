@@ -59,3 +59,44 @@ test_that("plot_rsi shades between the line and the thresholds", {
   expect_true(all(green$ymax == 30, na.rm = TRUE))
   expect_true(min(green$ymin, na.rm = TRUE) < 30)
 })
+
+test_that("plot_rsi plots multiple RSI lines", {
+  p <- plot_rsi(spy, rsi_col = c("RSI_9", "RSI_14", "RSI_21"))
+  expect_s3_class(p, "ggplot")
+
+  n_lines <- sum(vapply(
+    p$layers,
+    function(x) "GeomLine" %in% class(x$geom),
+    logical(1)
+  ))
+  expect_equal(n_lines, 3)
+})
+
+test_that("plot_rsi uses distinct gradient colors for multiple lines", {
+  p <- plot_rsi(spy, rsi_col = c("RSI_9", "RSI_14", "RSI_21"))
+  expect_s3_class(p, "ggplot")
+
+  built <- ggplot2::ggplot_build(p)$data
+  line_colors <- character(0)
+  for (i in seq_along(p$layers)) {
+    if ("GeomLine" %in% class(p$layers[[i]]$geom)) {
+      line_colors <- c(line_colors, unique(built[[i]]$colour))
+    }
+  }
+  expect_equal(length(unique(line_colors)), 3)
+})
+
+test_that("plot_rsi shows no legend for multiple lines", {
+  p <- plot_rsi(spy, rsi_col = c("RSI_9", "RSI_14", "RSI_21"))
+  expect_s3_class(p, "ggplot")
+
+  grob_names <- ggplot2::ggplotGrob(p)$layout$name
+  expect_false(any(grepl("guide", grob_names)))
+})
+
+test_that("plot_rsi validates missing RSI columns", {
+  expect_error(
+    plot_rsi(spy, rsi_col = c("RSI_9", "NOPE")),
+    "RSI columns not found in data"
+  )
+})

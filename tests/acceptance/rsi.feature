@@ -7,3 +7,9 @@ Feature: RSI plot
     And I should see no axis titles
     And RSI should be bounded by 0 and 100
     And I should see horizontal lines at 30 and 70
+
+  Scenario: Plot RSI with multiple periods
+    Given I have SPY data
+    When I plot RSI chart with multiple periods
+    Then I should see a ggplot
+    And I should see 3 RSI lines

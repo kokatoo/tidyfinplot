@@ -18,3 +18,19 @@ then("I should see horizontal lines at 30 and 70", function(context) {
   testthat::expect_true(30 %in% yintercepts)
   testthat::expect_true(70 %in% yintercepts)
 })
+
+when("I plot RSI chart with multiple periods", function(context) {
+  context$plot <- plot_rsi(
+    context$spy,
+    rsi_col = c("RSI_9", "RSI_14", "RSI_21")
+  )
+})
+
+then("I should see 3 RSI lines", function(context) {
+  n_lines <- sum(vapply(
+    context$plot$layers,
+    function(x) "GeomLine" %in% class(x$geom),
+    logical(1)
+  ))
+  testthat::expect_equal(n_lines, 3)
+})
