@@ -6,6 +6,9 @@
 \usage{
 sma_palette()
 }
+\value{
+Named character vector of SMA colors
+}
 \description{
 SMA color palette
 }

@@ -6,6 +6,9 @@
 \usage{
 candle_palette()
 }
+\value{
+Named character vector of up/down candle colors
+}
 \description{
 Candle color palette
 }
