@@ -72,3 +72,19 @@ plot_volume <- function(data, colors = candle_palette(),
     theme_tq() +
     theme(axis.title.x = element_blank())
 }
+
+#' Plot RSI with overbought and oversold thresholds
+#'
+#' @param data SPY data frame with a date and RSI column
+#' @param rsi_col Name of the RSI column to plot
+#' @param oversold Lower threshold line
+#' @param overbought Upper threshold line
+#' @param date_breaks Date break spacing
+#' @param date_labels Date label format
+#' @return ggplot object
+#' @export
+#' @import ggplot2 dplyr scales
+plot_rsi <- function(data, rsi_col = "RSI_14",
+                     oversold = 30, overbought = 70,
+                     date_breaks = "3 month", date_labels = "%b %y") {
+}
