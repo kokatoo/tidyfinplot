@@ -8,8 +8,10 @@
 #' @return ggplot object
 #' @export
 #' @import ggplot2 dplyr tidyquant scales
-plot_candlestick <- function(data, colors = sma_palette(), candles = candle_palette(),
-                             date_breaks = "3 month", date_labels = "%b %y") {
+plot_candlestick <- function(data, colors = sma_palette(),
+                             candles = candle_palette(),
+                             date_breaks = "3 month",
+                             date_labels = "%b %y") {
 
   ggplot(data, aes(x = date, y = close)) +
     tidyquant::geom_candlestick(

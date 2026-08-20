@@ -13,7 +13,11 @@ when("I plot candlestick chart with monthly breaks", function(context) {
 })
 
 then("I should see candlesticks", function(context) {
-  geoms <- vapply(context$plot$layers, function(x) class(x$geom)[1], character(1))
+  geoms <- vapply(
+    context$plot$layers,
+    function(x) class(x$geom)[1],
+    character(1)
+  )
   testthat::expect_true("GeomRectCS" %in% geoms)
 })
 

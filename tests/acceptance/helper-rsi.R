@@ -5,7 +5,8 @@ when("I plot RSI chart", function(context) {
 })
 
 then("RSI should be bounded by 0 and 100", function(context) {
-  y_limits <- ggplot2::ggplot_build(context$plot)$layout$panel_params[[1]]$y$get_limits()
+  built <- ggplot2::ggplot_build(context$plot)
+  y_limits <- built$layout$panel_params[[1]]$y$get_limits()
   testthat::expect_equal(y_limits, c(0, 100))
 })
 

@@ -41,7 +41,11 @@ test_that("plot_rsi shades between the line and the thresholds", {
   expect_s3_class(p, "ggplot")
 
   built <- ggplot2::ggplot_build(p)$data
-  fills <- vapply(built, function(d) paste(unique(d$fill), collapse = ","), character(1))
+  fills <- vapply(
+    built,
+    function(d) paste(unique(d$fill), collapse = ","),
+    character(1)
+  )
   candles <- candle_palette()
 
   red <- built[[which(fills == unname(candles["down"]))]]
