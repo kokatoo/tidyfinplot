@@ -24,6 +24,14 @@ plot_candlestick(spy)
 
 # Volume bars colored by up/down days
 plot_volume(spy)
+
+# Plot multiple RSIs
+plot_rsi(
+  spy,
+  rsi_col = c("RSI_9", "RSI_14", "RSI_21"),
+  date_breaks = "1 month",
+  date_labels = "%b %y"
+)
 ```
 
 ## Features
@@ -36,5 +44,4 @@ plot_volume(spy)
 
 ## License
 
-This project is licensed under the MIT License. See
-[LICENSE.md](LICENSE.md) for details.
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.

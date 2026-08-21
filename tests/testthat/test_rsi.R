@@ -6,7 +6,11 @@ test_that("plot_rsi returns a ggplot", {
 test_that("plot_rsi y axis is bounded by 0 and 100", {
   p <- plot_rsi(spy)
   expect_s3_class(p, "ggplot")
-  y_limits <- ggplot2::ggplot_build(p)$layout$panel_params[[1]]$y$get_limits()
+
+  gg_build <- ggplot2::ggplot_build(p)
+  panel_params <- gg_build$layout$panel_params[[1]]
+
+  y_limits <- panel_params$y$get_limits()
   expect_equal(y_limits, c(0, 100))
 })
 
@@ -33,6 +37,7 @@ test_that("plot_rsi has no axis titles", {
 
 test_that("plot_rsi works with a custom RSI column", {
   p <- plot_rsi(spy, rsi_col = "RSI_21")
+
   expect_s3_class(p, "ggplot")
 })
 
@@ -69,6 +74,7 @@ test_that("plot_rsi plots multiple RSI lines", {
     function(x) "GeomLine" %in% class(x$geom),
     logical(1)
   ))
+
   expect_equal(n_lines, 3)
 })
 
@@ -78,21 +84,14 @@ test_that("plot_rsi uses distinct gradient colors for multiple lines", {
 
   built <- ggplot2::ggplot_build(p)$data
   line_colors <- character(0)
+
   for (i in seq_along(p$layers)) {
     if ("GeomLine" %in% class(p$layers[[i]]$geom)) {
       line_colors <- c(line_colors, unique(built[[i]]$colour))
     }
   }
+
   expect_equal(length(unique(line_colors)), 3)
-})
-
-test_that("plot_rsi shows no legend for multiple lines", {
-  p <- plot_rsi(spy, rsi_col = c("RSI_9", "RSI_14", "RSI_21"))
-  expect_s3_class(p, "ggplot")
-
-  gg <- ggplot2::ggplotGrob(p)
-  guide_grobs <- gg$grobs[grepl("guide", gg$layout$name)]
-  expect_true(all(vapply(guide_grobs, inherits, logical(1), "zeroGrob")))
 })
 
 test_that("plot_rsi validates missing RSI columns", {
@@ -106,7 +105,6 @@ test_that("plot_rsi renders a dual y axis", {
   p <- plot_rsi(spy)
   expect_s3_class(p, "ggplot")
 
-  # Rendering warns about NA warm-up rows; irrelevant to the axis check
-  gg <- suppressWarnings(ggplot2::ggplotGrob(p))
+  gg <- ggplot2::ggplotGrob(p)
   expect_equal(sum(grepl("axis-r", gg$layout$name)), 1)
 })

@@ -1,5 +1,5 @@
 Package: tidyfinplot
-Title: What the Package Does (One Line, Title Case)
+Title: Tidyverse-style financial charting helpers built on tidyquant and ggplot2.
 Version: 0.0.0.9000
 Authors@R:
   person("Jason", "Kok", , "kokatoo1948@gmail.com", role = c("aut", "cre"))
