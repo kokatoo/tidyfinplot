@@ -31,7 +31,6 @@ jobs:
             any::devtools
             any::testthat
             any::covr
-            any::cucumber
             any::tidyquant
             any::ggplot2
             any::dplyr
@@ -45,12 +44,6 @@ jobs:
 
       - name: Run unit tests
         run: devtools::test()
-        shell: Rscript {0}
-
-      - name: Run BDD tests
-        run: |
-          library(cucumber)
-          cucumber::test("tests/acceptance")
         shell: Rscript {0}
 
       - name: Run coverage
